@@ -2,6 +2,48 @@
 
 {% block title %}Pages / Inscription - App gestion de stock 2023{% endblock title %}
 
+{% block script %}
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+  function Afficher()
+    { 
+    var input = document.getElementById("yourPassword"); 
+    if (input.type === "password")
+    { 
+    input.type = "text"; 
+    } 
+    else
+    { 
+    input.type = "password"; 
+    } 
+    } 
+
+
+
+    function Afficher2()
+    { 
+    var input = document.getElementById("yourRepeatPassword"); 
+    if (input.type === "password")
+    { 
+    input.type = "text"; 
+    } 
+    else
+    { 
+    input.type = "password"; 
+    } 
+    } 
+
+});
+
+</script>
+
+
+        
+{% endblock script %}
+
 {% block content %}
 <main>
     <div class="container">
@@ -11,62 +53,113 @@
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-              <div class="d-flex justify-content-center py-4">
+              <!-- <div class="d-flex justify-content-center py-4">
                 <a href="index.html" class="logo d-flex align-items-center w-auto">
                   <img src="assets/img/logo.png" alt="">
                   <span class="d-none d-lg-block">NiceAdmin</span>
                 </a>
-              </div><!-- End Logo -->
+              </div> -->
+              <!-- End Logo -->
 
               <div class="card mb-3">
+                
 
                 <div class="card-body">
+                  
+                  {% if error %}
 
-                  <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                    <p class="text-center small">Enter your personal details to create account</p>
+                  <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                    <p style="color: red;">
+                   {{message}}
+                  </p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                    
+                  {% endif %}
+
+                  <!-- <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                  {% for field in registration_form  %}
+                    
+                        
+                        {% for error in field.errors %}
+                          <p style="color: red;">{{error}}</p>
+                        {% endfor %} 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>         
+                    
+                  {% endfor %}
+                  </div> -->
+                     
+                     <!-- {% if registration_form.non_field_errors %}
+                      <div style="color: red;">
+                           <p>{{registration_form.non_field_errors}}</p>
+                      </div>
+                     {% endif %} -->
+                       
+                
+                  <div class="pt-2 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Créer un nouveau compte</h5>
+                    <p class="text-center small">Entrez vos données personnelles pour créer un compte</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form class="row g-3 needs-validation" method="POST" action="{% url 'users-register' %}" novalidate>
+
+                    {% csrf_token %}
+
+
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required>
-                      <div class="invalid-feedback">Please, enter your name!</div>
+                      <label for="yourName" class="form-label">Nom</label>
+                      <input type="text" name="nom" class="form-control" id="yourName" required>
+                      <div class="invalid-feedback">Nom</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourEmail" class="form-label">Your Email</label>
+                      <label for="yourFirstName" class="form-label">Prénom</label>
+                      <input type="text" name="prenom" class="form-control" id="yourFirstName" required>
+                      <div class="invalid-feedback">Prénom</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">Email</label>
                       <input type="email" name="email" class="form-control" id="yourEmail" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                      <div class="invalid-feedback">Email</div>
+                    </div>
+
+                    <div class="form-floating col-12">
+                      <select class="form-select" id="floatingSelect" name="profil" Floating label select example>
+                        <!-- <option selected>Profil</option> -->
+                        {% for profil in profils %}
+                        <option value="{{profil.id}}">{{profil.libelle}}</option>
+                        {% endfor %}
+                      </select>
+                      <label for="floatingSelect">Sélectionner votre profil</label>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                      </div>
+                      <label for="yourPassword" class="form-label">Mot de passe</label>
+                      <input type="password" name="password1" class="form-control" id="yourPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Le mot de passe doit contenir au moins 8 caractères composés d'au moins un chiffre, d'une lettre majuscule et d'une lettre minuscule" required>
+                      <div class="invalid-feedback">Entrez votre mot de passe</div>
+                      <input type="checkbox" onclick="Afficher()"> Afficher le mot de passe
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
+                      <label for="yourRepeatPassword" class="form-label">Confirmer votre mot de passe</label>
+                      <input type="password" name="password2" class="form-control" id="yourRepeatPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Le mot de passe doit contenir au moins 8 caractères composés d'au moins un chiffre, d'une lettre majuscule et d'une lettre minuscule" required>
+                      <div class="invalid-feedback">Confirmer votre mot de passe</div>
+                      <input type="checkbox" onclick="Afficher2()"> Afficher le mot de passe
                     </div>
 
                     <div class="col-12">
                       <div class="form-check">
                         <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
+                        <label class="form-check-label" for="acceptTerms">Je suis d'accord et j'acceptes les <a href="#">termes et conditions</a></label>
+                        <div class="invalid-feedback">Vous devez donner votre accord avant de soumettre votre demande.</div>
                       </div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                      <button class="btn btn-primary w-100" type="submit">Créer</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
+                      <p class="small mb-0">Avez-vous déjà un compte ? <a href="{% url 'sign_in' %}">Log in</a></p>
                     </div>
                   </form>
 
@@ -91,3 +184,45 @@
   </main><!-- End #main -->
 
 {% endblock content %}
+
+
+{% block script_js %}
+
+<script type="text/javascript">
+
+
+
+  function Afficher()
+    { 
+    var input = document.getElementById("yourPassword"); 
+    if (input.type === "password")
+    { 
+    input.type = "text"; 
+    } 
+    else
+    { 
+    input.type = "password"; 
+    } 
+    } 
+
+
+
+    function Afficher2()
+    { 
+    var input = document.getElementById("yourRepeatPassword"); 
+    if (input.type === "password")
+    { 
+    input.type = "text"; 
+    } 
+    else
+    { 
+    input.type = "password"; 
+    } 
+    } 
+
+
+</script>
+
+
+        
+{% endblock script_js %}

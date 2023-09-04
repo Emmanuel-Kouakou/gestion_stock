@@ -27,6 +27,9 @@ SECRET_KEY = 'django-insecure-6g$=5*a)d&m6)p83n1*nxlng34pp%2f0$e7yl*jg@06*&h&+vj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 ALLOWED_HOSTS = []
 
 
@@ -78,8 +81,11 @@ WSGI_APPLICATION = 'gestion_stock.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'gestion_stock',
+        'USER':'postgres',
+        'PASSWORD':'root',
+        'HOST': 'localhost'
     }
 }
 
@@ -108,9 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fr-FR'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Abidjan'
 
-USE_I18N = True
+# USE_I18N = True
 
 USE_TZ = True
 
@@ -125,3 +131,19 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "gestion_stock/static")]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.Utilisateur'
+
+
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.AllowAllUsersModelBackends',
+#     'users.backends.CaseInsensitiveModelBackend'
+# )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'emmanuelug.kouakou@gmail.com'
+EMAIL_HOST_PASSWORD = 'evxr wvhd sizj jkgr'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Equipe Saar CI <noreply@saarci.com>'

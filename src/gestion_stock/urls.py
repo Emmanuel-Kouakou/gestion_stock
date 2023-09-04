@@ -17,12 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from users.views import login
+from users.views import sign_in
 from .views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', login, name='login'),
+    path('', sign_in, name='sign_in'),
     path('accueil/', index, name='index'),
     path('users/', include('users.urls')),
 ]
